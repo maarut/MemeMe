@@ -24,21 +24,21 @@
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="PxJ-UL-w7P"/>
-                                    <barButtonItem title="Pick" id="uz5-dU-XWn">
+                                    <barButtonItem title="Album" id="uz5-dU-XWn">
                                         <connections>
-                                            <action selector="pickImage:" destination="BYZ-38-t0r" id="Rdi-dA-J9Y"/>
+                                            <action selector="chooseImage:" destination="BYZ-38-t0r" id="cN0-ab-jQE"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="kkl-iz-Qa9"/>
-                                    <barButtonItem title="Shoot" id="fkh-Ii-Ute">
+                                    <barButtonItem systemItem="camera" id="fkh-Ii-Ute">
                                         <connections>
-                                            <action selector="takeImage:" destination="BYZ-38-t0r" id="kIa-53-r7I"/>
+                                            <action selector="captureImage:" destination="BYZ-38-t0r" id="ohU-fM-hHO"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="I3j-ll-u0j"/>
                                 </items>
                             </toolbar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ycX-WI-WbD">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="ycX-WI-WbD">
                                 <rect key="frame" x="0.0" y="60" width="600" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="mTl-Se-h2v"/>
@@ -47,7 +47,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" spellCheckingType="no"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V4w-Nw-huY">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="V4w-Nw-huY">
                                 <rect key="frame" x="0.0" y="466" width="600" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="VJf-n5-FKH"/>
@@ -84,6 +84,79 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="413" y="683"/>
+        </scene>
+        <!--Meme Me View Controller-->
+        <scene sceneID="Mbg-b9-eRf">
+            <objects>
+                <viewController id="jZz-n5-f1K" customClass="MemeMeViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ufd-gQ-iBY"/>
+                        <viewControllerLayoutGuide type="bottom" id="TlC-mg-94x"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wAf-au-tt8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aoX-3a-JUo">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="xyY-Ge-Lha"/>
+                                    <barButtonItem title="Choose" id="wAJ-pV-hNq">
+                                        <connections>
+                                            <action selector="pickImage:" destination="jZz-n5-f1K" id="ait-Vf-L9v"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Oh1-Kg-c4Z"/>
+                                    <barButtonItem title="Capture" id="2N5-4R-e3B">
+                                        <connections>
+                                            <action selector="takeImage:" destination="jZz-n5-f1K" id="axv-wX-XX6"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="drj-Nx-egg"/>
+                                </items>
+                            </toolbar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FY7-p4-zPN">
+                                <rect key="frame" x="0.0" y="20" width="600" height="536"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="spg-ZK-xzd">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="spg-ZK-xzd" secondAttribute="trailing" id="3Mj-DZ-kfP"/>
+                                    <constraint firstItem="spg-ZK-xzd" firstAttribute="leading" secondItem="FY7-p4-zPN" secondAttribute="leading" id="9ng-nZ-xpx"/>
+                                    <constraint firstItem="spg-ZK-xzd" firstAttribute="top" secondItem="FY7-p4-zPN" secondAttribute="top" id="m3q-ub-Alc"/>
+                                    <constraint firstAttribute="bottom" secondItem="spg-ZK-xzd" secondAttribute="bottom" id="qd9-it-BMj"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="DSm-lH-X8F" appends="YES" id="2bW-Yb-lZJ"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="FY7-p4-zPN" firstAttribute="top" secondItem="Ufd-gQ-iBY" secondAttribute="bottom" id="4ge-5T-7tl"/>
+                            <constraint firstItem="aoX-3a-JUo" firstAttribute="leading" secondItem="FY7-p4-zPN" secondAttribute="leading" id="J1r-bx-iCi"/>
+                            <constraint firstItem="aoX-3a-JUo" firstAttribute="trailing" secondItem="FY7-p4-zPN" secondAttribute="trailing" id="MUC-kh-MbA"/>
+                            <constraint firstAttribute="trailing" secondItem="aoX-3a-JUo" secondAttribute="trailing" id="SaS-9c-Qe8"/>
+                            <constraint firstItem="aoX-3a-JUo" firstAttribute="top" secondItem="FY7-p4-zPN" secondAttribute="bottom" id="gTb-e0-vpb"/>
+                            <constraint firstItem="aoX-3a-JUo" firstAttribute="bottom" secondItem="TlC-mg-94x" secondAttribute="top" id="qKN-Rr-65Q"/>
+                            <constraint firstItem="FY7-p4-zPN" firstAttribute="leading" secondItem="wAf-au-tt8" secondAttribute="leading" id="u61-0j-gk5"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="captureImageButton" destination="2N5-4R-e3B" id="TkG-XD-2oP"/>
+                        <outlet property="containerView" destination="FY7-p4-zPN" id="bi5-eb-idP"/>
+                        <outlet property="imageView" destination="spg-ZK-xzd" id="Y18-8C-pSb"/>
+                        <outlet property="tapGestureRecogniser" destination="DSm-lH-X8F" id="oNI-wr-l0m"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bgu-iT-xql" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="DSm-lH-X8F"/>
+            </objects>
+            <point key="canvasLocation" x="1069" y="683"/>
         </scene>
     </scenes>
 </document>
