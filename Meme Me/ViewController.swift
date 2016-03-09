@@ -8,16 +8,20 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate {
 
     // MARK: - IBOutlet's
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var takePictureButton: UIBarButtonItem!
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     
     // MARK: - Private variables
     private weak var activeControl: UIView?
+    private var originalContentOffset: CGPoint?
     
     // MARK: - UIViewController Overrides
     override func viewDidLoad() {
@@ -39,10 +43,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ]
         topTextField.defaultTextAttributes = textFieldAttributes
         bottomTextField.defaultTextAttributes = textFieldAttributes
-        topTextField.attributedText = NSAttributedString(string: "Enter text here...", attributes: textFieldAttributes)
-        bottomTextField.attributedText = NSAttributedString(string: "...and here", attributes: textFieldAttributes)
+        topTextField.attributedText = NSAttributedString(string: "ENTER TEXT HERE...", attributes: textFieldAttributes)
+        bottomTextField.attributedText = NSAttributedString(string: "...AND HERE", attributes: textFieldAttributes)
         topTextField.hidden = true
         bottomTextField.hidden = true
+        containerView.bringSubviewToFront(topTextField)
+        containerView.bringSubviewToFront(bottomTextField)
     }
 
     override func viewWillAppear(animated: Bool)
@@ -50,6 +56,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
+        shareButton.enabled = imageView.image != nil
     }
     
     override func viewWillDisappear(animated: Bool)
@@ -57,6 +65,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidHideNotification, object: nil)
     }
     
     // MARK: - IBAction's
@@ -65,7 +74,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     {
         let imagePickerVC = UIImagePickerController()
         imagePickerVC.delegate = self
-        self.presentViewController(imagePickerVC, animated: true, completion: nil)
+        presentViewController(imagePickerVC, animated: true, completion: nil)
     }
     
     @IBAction func captureImage(sender: AnyObject)
@@ -75,7 +84,33 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePickerVC.sourceType = .Camera
         imagePickerVC.cameraDevice = .Front
         imagePickerVC.cameraCaptureMode = .Photo
-        self.presentViewController(imagePickerVC, animated: true, completion: nil)
+        presentViewController(imagePickerVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func cancelMeme(sender: AnyObject)
+    {
+        scrollView.contentOffset = CGPointZero
+        scrollView.contentSize = CGSizeZero
+        scrollView.zoomScale = 1.0
+        imageView.image = nil
+        topTextField.hidden = true
+        bottomTextField.hidden = true
+        topTextField.text = "ENTER TEXT HERE..."
+        bottomTextField.text = "...AND HERE"
+        shareButton.enabled = false
+    }
+    
+    @IBAction func shareMeme(sender: AnyObject)
+    {
+        let image = composeImage()
+        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        presentViewController(activityVC, animated: true, completion: { self.saveMemeUsingComposedImage(image) })
+    }
+    
+    // MARK: - UIScrollViewDelegate Methods
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView?
+    {
+        return imageView
     }
     
     // MARK: - UITextFieldDelegate Methods
@@ -115,7 +150,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         topTextField.hidden = false
         bottomTextField.hidden = false
+        scrollView.contentOffset = CGPointZero
+        scrollView.contentSize = CGSizeZero
+        scrollView.zoomScale = 1.0
+        shareButton.enabled = imageView.image != nil
         picker.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     // MARK: - Keyboard Notification Handlers
@@ -125,19 +165,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let keyboardHeight = getKeyboardHeight(notification)
         var viewFrame = view.frame
         viewFrame.size.height -= keyboardHeight
-        if activeControl != nil && !CGRectContainsPoint(viewFrame, activeControl!.frame.origin) {
-            UIView.animateWithDuration(0.5) { self.view.frame.origin.y -= keyboardHeight }
+        if let activeControl = activeControl {
+            var bottomOfControl = activeControl.frame.origin
+            bottomOfControl.y += activeControl.frame.height
+            if !CGRectContainsPoint(viewFrame, bottomOfControl) {
+                scrollView.contentInset = UIEdgeInsetsMake(0, 0, keyboardHeight, 0)
+                originalContentOffset = scrollView.contentOffset
+                UIView.animateWithDuration(0.5) { self.view.frame.origin.y -= keyboardHeight }
+            }
         }
     }
     
     func keyboardWillHide(notification: NSNotification)
     {
         if view.frame.origin.y != 0 {
-            UIView.animateWithDuration(0.5) { self.view.frame.origin.y = 0.0 }
+            view.frame.origin.y = 0
         }
     }
     
-    // MARK: - Private Function
+    func keyboardDidHide(notification: NSNotification)
+    {
+        if let originalContentOffset = originalContentOffset {
+            scrollView.contentOffset = originalContentOffset
+            scrollView.contentInset = UIEdgeInsetsZero
+            self.originalContentOffset = nil
+        }
+    }
+
+    // MARK: - Private Functions
     
     private func getKeyboardHeight(notification: NSNotification) -> CGFloat
     {
@@ -167,6 +222,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
 
+    private func composeImage() -> UIImage
+    {
+        var drawingFrame = containerView.frame
+        drawingFrame.origin = CGPointZero
+        drawingFrame.size.height *= UIScreen.mainScreen().scale
+        drawingFrame.size.width *= UIScreen.mainScreen().scale
+        UIGraphicsBeginImageContext(drawingFrame.size)
+        containerView.drawViewHierarchyInRect(drawingFrame, afterScreenUpdates: true)
+        let composedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return composedImage
+    }
+    
+    private func saveMemeUsingComposedImage(image: UIImage)
+    {
+        let meme = MemeModel(topTextField: topTextField.text ?? "",
+            bottomTextField: bottomTextField.text ?? "",
+            originalImage: imageView.image!,
+            composedImage: image,
+            contentOffset: scrollView.contentOffset,
+            contentSize: scrollView.contentSize,
+            zoomScale: Float(scrollView.zoomScale))
+        // TODO: Where to put this meme?
+        
+    }
     
 }
 
