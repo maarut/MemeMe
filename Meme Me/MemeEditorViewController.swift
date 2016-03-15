@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate {
+class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate {
 
     // MARK: - IBOutlet's
     @IBOutlet weak var imageView: UIImageView!
@@ -28,27 +28,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         takePictureButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
-        topTextField.delegate = self
-        bottomTextField.delegate = self
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.setParagraphStyle(NSParagraphStyle.defaultParagraphStyle())
-        paragraphStyle.alignment = .Center
-        let textFieldAttributes/*: [String: AnyObject]*/ = [
-            NSStrokeColorAttributeName: UIColor.blackColor(),
-            NSForegroundColorAttributeName: UIColor.whiteColor(),
-            NSStrokeWidthAttributeName: -3.0,
-            NSFontAttributeName: UIFont(name: "Impact", size: 40)!,
-            NSParagraphStyleAttributeName: paragraphStyle
-        ]
-        topTextField.defaultTextAttributes = textFieldAttributes
-        bottomTextField.defaultTextAttributes = textFieldAttributes
-        topTextField.attributedText = NSAttributedString(string: "ENTER TEXT HERE...", attributes: textFieldAttributes)
-        bottomTextField.attributedText = NSAttributedString(string: "...AND HERE", attributes: textFieldAttributes)
-        topTextField.hidden = true
-        bottomTextField.hidden = true
-        containerView.bringSubviewToFront(topTextField)
-        containerView.bringSubviewToFront(bottomTextField)
+        setUpTextField(topTextField, text: "ENTER TEXT HERE...", attributes: MemeAttributes.attributes())
+        setUpTextField(bottomTextField, text: "...AND HERE", attributes: MemeAttributes.attributes())
     }
 
     override func viewWillAppear(animated: Bool)
@@ -98,13 +80,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         topTextField.text = "ENTER TEXT HERE..."
         bottomTextField.text = "...AND HERE"
         shareButton.enabled = false
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func shareMeme(sender: AnyObject)
     {
         let image = composeImage()
         let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        presentViewController(activityVC, animated: true, completion: { self.saveMemeUsingComposedImage(image) })
+        activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, error in
+            if completed {
+                self.saveMemeUsingComposedImage(image)
+            }
+        }
+        presentViewController(activityVC, animated: true, completion: nil)
     }
     
     // MARK: - UIScrollViewDelegate Methods
@@ -244,8 +232,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             contentOffset: scrollView.contentOffset,
             contentSize: scrollView.contentSize,
             zoomScale: Float(scrollView.zoomScale))
-        // TODO: Where to put this meme?
+        (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
         
+    }
+    
+    private func setUpTextField(textField: UITextField, text: String, attributes: [String: AnyObject])
+    {
+        textField.delegate = self
+        textField.defaultTextAttributes = attributes
+        textField.attributedText = NSAttributedString(string: text, attributes: attributes)
+        textField.hidden = true
+        containerView.bringSubviewToFront(textField)
     }
     
 }
