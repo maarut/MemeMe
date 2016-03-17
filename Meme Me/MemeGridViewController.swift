@@ -11,7 +11,19 @@ import UIKit
 class SentMemeGridViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     var memes: [MemeModel]?
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
+    {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        let itemsPerRow = CGFloat(size.height > size.width ? 3.0 : 4.0)
+        let spacing = CGFloat(5.0)
+        let width = (size.width - (itemsPerRow - 1) * spacing) / itemsPerRow
+        flowLayout.itemSize = CGSizeMake(width, width)
+        flowLayout.minimumInteritemSpacing = spacing
+        flowLayout.minimumLineSpacing = spacing
+    }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)

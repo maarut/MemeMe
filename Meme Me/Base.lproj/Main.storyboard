@@ -199,6 +199,7 @@
                     <tabBarItem key="tabBarItem" title="Grid" image="collection_30x30" id="594-SN-kpe" userLabel="Collection View"/>
                     <connections>
                         <outlet property="collectionView" destination="1n6-Wg-ywu" id="7cp-qk-FwM"/>
+                        <outlet property="flowLayout" destination="zS8-vm-QNX" id="maa-Ul-wYW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uZu-50-6fO" userLabel="First Responder" sceneMemberID="firstResponder"/>
