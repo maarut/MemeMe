@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="KEc-ei-N6v">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="KEc-ei-N6v">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
+        <!--Meme Detail View-->
+        <scene sceneID="8G6-pa-MHg">
+            <objects>
+                <viewController storyboardIdentifier="memeDetail" title="Meme Detail View" id="RV6-Tn-l6x" customClass="MemeDetailViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Qpg-2K-OaO"/>
+                        <viewControllerLayoutGuide type="bottom" id="LNq-1N-kAj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="i5M-63-3A7">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gch-up-ccn">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="bottom" secondItem="LNq-1N-kAj" secondAttribute="top" id="GFG-Pm-Wh2"/>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="top" secondItem="Qpg-2K-OaO" secondAttribute="bottom" id="X2m-yq-3W4"/>
+                            <constraint firstAttribute="trailing" secondItem="gch-up-ccn" secondAttribute="trailing" id="iSs-0J-LnO"/>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="leading" secondItem="i5M-63-3A7" secondAttribute="leading" id="rY8-xa-Sys"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="gch-up-ccn" id="mRA-LY-p3m"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yy9-UO-Eoo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2400" y="1631"/>
+        </scene>
         <!--Meme Editor View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MemeEditorViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="memeEditor" id="BYZ-38-t0r" customClass="MemeEditorViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -137,12 +169,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613" y="634"/>
+            <point key="canvasLocation" x="755" y="2384"/>
         </scene>
         <!--Collection View-->
         <scene sceneID="fNb-1R-V0Q">
             <objects>
-                <viewController id="lK6-IK-2qH" userLabel="Collection View" customClass="SentMemeGridViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sentMemeGrid" id="lK6-IK-2qH" userLabel="Collection View" customClass="SentMemeGridViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="P6d-q6-CAL"/>
                         <viewControllerLayoutGuide type="bottom" id="s4z-Ld-KBR"/>
@@ -204,12 +236,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uZu-50-6fO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613" y="2012"/>
+            <point key="canvasLocation" x="1613" y="2192"/>
         </scene>
         <!--Table View-->
         <scene sceneID="Ehv-s1-FLq">
             <objects>
-                <viewController id="AhQ-gA-xh7" userLabel="Table View" customClass="SentMemeListViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sentMemeList" id="AhQ-gA-xh7" userLabel="Table View" customClass="SentMemeListViewController" customModule="Meme_Me" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xFx-fQ-yY7"/>
                         <viewControllerLayoutGuide type="bottom" id="mdb-gc-qmI"/>
@@ -275,7 +307,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IwR-QN-PEP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613" y="1294"/>
+            <point key="canvasLocation" x="1613" y="1156"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="AyD-DV-dGd">
@@ -284,7 +316,7 @@
                     <navigationItem key="navigationItem" id="GIO-9X-VKd">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="MO3-2f-tyA">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="presentation" id="23f-aN-VJI"/>
+                                <segue destination="BYZ-38-t0r" kind="presentation" identifier="editMeme" id="23f-aN-VJI"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

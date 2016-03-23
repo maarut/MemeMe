@@ -23,6 +23,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     private weak var activeControl: UIView?
     private var originalContentOffset: CGPoint?
     
+    // MARK: - Public variable
+    
+    var memeModel: MemeModel?
+    
     // MARK: - UIViewController Overrides
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +40,24 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide:", name: UIKeyboardDidHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditorViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditorViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditorViewController.keyboardDidHide(_:)), name: UIKeyboardDidHideNotification, object: nil)
+    }
+    
+    override func viewDidAppear(animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        if let memeModel = memeModel {
+            topTextField.text = memeModel.topTextField
+            bottomTextField.text = memeModel.bottomTextField
+            topTextField.hidden = false
+            bottomTextField.hidden = false
+            imageView.image = memeModel.originalImage
+            scrollView.zoomScale = CGFloat(memeModel.zoomScale)
+            scrollView.contentOffset = memeModel.contentOffset
+            scrollView.contentSize = memeModel.contentSize
+        }
         shareButton.enabled = imageView.image != nil
     }
     
@@ -48,6 +67,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidHideNotification, object: nil)
+        memeModel = nil
     }
     
     // MARK: - IBAction's

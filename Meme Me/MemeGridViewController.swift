@@ -10,8 +10,8 @@ import UIKit
 
 class SentMemeGridViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    @IBOutlet var collectionView: UICollectionView!
-    @IBOutlet var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     var memes: [MemeModel]?
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
@@ -43,5 +43,13 @@ class SentMemeGridViewController: UIViewController, UICollectionViewDelegate, UI
         let imageView = cell.viewWithTag(1) as! UIImageView
         imageView.image = memes?[indexPath.row].composedImage
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    {
+        if let nextVC = storyboard?.instantiateViewControllerWithIdentifier("memeDetail") as? MemeDetailViewController {
+            nextVC.memeToDisplay = memes?[indexPath.row]
+            navigationController?.pushViewController(nextVC, animated: true)
+        }
     }
 }
