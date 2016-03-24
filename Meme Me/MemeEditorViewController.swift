@@ -110,6 +110,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, error in
             if completed {
                 self.saveMemeUsingComposedImage(image)
+                self.cancelMeme(self)
             }
         }
         presentViewController(activityVC, animated: true, completion: nil)
