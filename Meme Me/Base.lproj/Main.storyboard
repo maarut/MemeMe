@@ -19,15 +19,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gch-up-ccn">
-                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="536"/>
                             </imageView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c0Y-uG-dvL">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="s3f-Vj-Z5o"/>
+                                    <barButtonItem systemItem="action" id="ken-y8-o5f">
+                                        <connections>
+                                            <action selector="shareMeme:" destination="RV6-Tn-l6x" id="wi2-qv-CcT"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="N8u-c3-Awh"/>
+                                    <barButtonItem systemItem="trash" id="aUs-hl-e9c">
+                                        <connections>
+                                            <action selector="deleteMeme:" destination="RV6-Tn-l6x" id="Gnu-Od-VJZ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="j49-JW-Lkw"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gch-up-ccn" firstAttribute="bottom" secondItem="LNq-1N-kAj" secondAttribute="top" id="GFG-Pm-Wh2"/>
-                            <constraint firstItem="gch-up-ccn" firstAttribute="top" secondItem="Qpg-2K-OaO" secondAttribute="bottom" id="X2m-yq-3W4"/>
-                            <constraint firstAttribute="trailing" secondItem="gch-up-ccn" secondAttribute="trailing" id="iSs-0J-LnO"/>
-                            <constraint firstItem="gch-up-ccn" firstAttribute="leading" secondItem="i5M-63-3A7" secondAttribute="leading" id="rY8-xa-Sys"/>
+                            <constraint firstItem="c0Y-uG-dvL" firstAttribute="bottom" secondItem="LNq-1N-kAj" secondAttribute="top" id="0xK-d9-voq"/>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="leading" secondItem="c0Y-uG-dvL" secondAttribute="leading" id="FOG-ZN-tl3"/>
+                            <constraint firstAttribute="trailing" secondItem="gch-up-ccn" secondAttribute="trailing" id="Tul-Ns-Lau"/>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="trailing" secondItem="c0Y-uG-dvL" secondAttribute="trailing" id="eSV-bb-6KE"/>
+                            <constraint firstItem="c0Y-uG-dvL" firstAttribute="top" secondItem="gch-up-ccn" secondAttribute="bottom" id="fnh-VO-FTy"/>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="top" secondItem="Qpg-2K-OaO" secondAttribute="bottom" id="hgG-Ei-l9K"/>
+                            <constraint firstItem="gch-up-ccn" firstAttribute="leading" secondItem="i5M-63-3A7" secondAttribute="leading" id="igW-vv-4ci"/>
                         </constraints>
                     </view>
                     <connections>
@@ -135,9 +156,9 @@
                                 </items>
                             </toolbar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meme Editor" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ugw-Hy-bv3">
-                                <rect key="frame" x="252" y="31.5" width="97" height="20.5"/>
+                                <rect key="frame" x="252" y="32" width="97" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -250,7 +271,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cOQ-hd-SfD">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cOQ-hd-SfD">
                                 <rect key="frame" x="0.0" y="20" width="600" height="531"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -258,13 +279,13 @@
                                         <rect key="frame" x="0.0" y="92" width="600" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XJ5-yA-7vB" id="AiV-f0-5ZQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P2F-c9-vAm">
                                                     <rect key="frame" x="108" y="0.0" width="492" height="100"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ufc-Pp-XYM">

@@ -26,12 +26,23 @@ class MemeDetailViewController: UIViewController {
         navigationController?.navigationBar.topItem?.rightBarButtonItem = rightItem
     }
     
-    func editPressed(sender: UIBarButtonItem)
+    func editPressed(sender: AnyObject)
     {
         if let nextVC = storyboard?.instantiateViewControllerWithIdentifier("memeEditor") as? MemeEditorViewController {
             nextVC.memeModel = memeToDisplay
             presentViewController(nextVC, animated: true, completion: nil)
         }
     }
-
+    
+    @IBAction func deleteMeme(sender: AnyObject)
+    {
+        //TODO: Delete Meme
+    }
+    
+    @IBAction func shareMeme(sender: AnyObject)
+    {
+        let activityVC = UIActivityViewController(activityItems: [memeToDisplay!.composedImage], applicationActivities: nil)
+        presentViewController(activityVC, animated: true, completion: nil)
+    }
+    
 }
