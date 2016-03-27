@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol MemeEditorDelegate: AnyObject
+{
+    func didFinishEditing(newMeme: MemeModel)
+}
+
 class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate {
 
     // MARK: - IBOutlet's
@@ -26,6 +31,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     // MARK: - Public variable
     
     var memeModel: MemeModel?
+    weak var delegate: MemeEditorDelegate?
     
     // MARK: - UIViewController Overrides
     override func viewDidLoad() {
@@ -68,6 +74,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidHideNotification, object: nil)
         memeModel = nil
+        delegate = nil
     }
     
     // MARK: - IBAction's
@@ -253,7 +260,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
             contentOffset: scrollView.contentOffset,
             contentSize: scrollView.contentSize,
             zoomScale: Float(scrollView.zoomScale))
-        (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
+        if let delegate = delegate {
+            delegate.didFinishEditing(meme)
+        }
+        else {
+            (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
+        }
         
     }
     

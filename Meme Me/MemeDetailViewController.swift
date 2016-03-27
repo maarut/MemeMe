@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeDetailViewController: UIViewController {
+class MemeDetailViewController: UIViewController, MemeEditorDelegate {
 
     var memeToDisplay: MemeModel?
     @IBOutlet weak var imageView: UIImageView!
@@ -29,8 +29,21 @@ class MemeDetailViewController: UIViewController {
     func editPressed(sender: AnyObject)
     {
         if let nextVC = storyboard?.instantiateViewControllerWithIdentifier("memeEditor") as? MemeEditorViewController {
+            nextVC.delegate = self
             nextVC.memeModel = memeToDisplay
             presentViewController(nextVC, animated: true, completion: nil)
+        }
+    }
+    
+    func didFinishEditing(newMeme: MemeModel)
+    {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        if let index = appDelegate.memes.indexOf(memeToDisplay ?? newMeme) {
+            appDelegate.memes[index] = newMeme
+            memeToDisplay = newMeme
+        }
+        else {
+            appDelegate.memes.append(newMeme)
         }
     }
     
