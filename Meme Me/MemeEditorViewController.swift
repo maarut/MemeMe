@@ -22,11 +22,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var topToolbar: UIToolbar!
     
     // MARK: - Private variables
     private weak var activeControl: UIView?
     private var originalContentOffset: CGPoint?
+    private weak var shareButton: UIBarButtonItem?
     
     // MARK: - Public variable
     
@@ -36,7 +37,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     // MARK: - UIViewController Overrides
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         takePictureButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
         
         setUpTextField(topTextField, text: "ENTER TEXT HERE...", attributes: MemeAttributes.attributes())
@@ -49,6 +49,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditorViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditorViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditorViewController.keyboardDidHide(_:)), name: UIKeyboardDidHideNotification, object: nil)
+        configureToolbar()
     }
     
     override func viewDidAppear(animated: Bool)
@@ -64,7 +65,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
             scrollView.contentOffset = memeModel.contentOffset
             scrollView.contentSize = memeModel.contentSize
         }
-        shareButton.enabled = imageView.image != nil
+        shareButton?.enabled = imageView.image != nil
     }
     
     override func viewWillDisappear(animated: Bool)
@@ -96,7 +97,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         presentViewController(imagePickerVC, animated: true, completion: nil)
     }
     
-    @IBAction func cancelMeme(sender: AnyObject)
+    // MARK: - Button Event Handlers
+    func cancelMeme(sender: AnyObject)
     {
         scrollView.contentOffset = CGPointZero
         scrollView.contentSize = CGSizeZero
@@ -106,21 +108,29 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         bottomTextField.hidden = true
         topTextField.text = "ENTER TEXT HERE..."
         bottomTextField.text = "...AND HERE"
-        shareButton.enabled = false
+        shareButton?.enabled = false
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    @IBAction func shareMeme(sender: AnyObject)
+    func shareMeme(sender: AnyObject)
     {
         let image = composeImage()
         let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, error in
             if completed {
-                self.saveMemeUsingComposedImage(image)
+                let meme = self.createMemeUsingComposedImage(image)
+                (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
                 self.cancelMeme(self)
             }
         }
         presentViewController(activityVC, animated: true, completion: nil)
+    }
+    
+    func doneEditing(sender: AnyObject)
+    {
+        let meme = createMemeUsingComposedImage(composeImage())
+        cancelMeme(self)
+        delegate!.didFinishEditing(meme)
     }
     
     // MARK: - UIScrollViewDelegate Methods
@@ -169,7 +179,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         scrollView.contentOffset = CGPointZero
         scrollView.contentSize = CGSizeZero
         scrollView.zoomScale = 1.0
-        shareButton.enabled = imageView.image != nil
+        shareButton?.enabled = imageView.image != nil
         picker.dismissViewControllerAnimated(true, completion: nil)
         
     }
@@ -251,22 +261,15 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         return composedImage
     }
     
-    private func saveMemeUsingComposedImage(image: UIImage)
+    private func createMemeUsingComposedImage(image: UIImage) -> MemeModel
     {
-        let meme = MemeModel(topTextField: topTextField.text ?? "",
+        return MemeModel(topTextField: topTextField.text ?? "",
             bottomTextField: bottomTextField.text ?? "",
             originalImage: imageView.image!,
             composedImage: image,
             contentOffset: scrollView.contentOffset,
             contentSize: scrollView.contentSize,
             zoomScale: Float(scrollView.zoomScale))
-        if let delegate = delegate {
-            delegate.didFinishEditing(meme)
-        }
-        else {
-            (UIApplication.sharedApplication().delegate as! AppDelegate).memes.append(meme)
-        }
-        
     }
     
     private func setUpTextField(textField: UITextField, text: String, attributes: [String: AnyObject])
@@ -276,6 +279,21 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         textField.attributedText = NSAttributedString(string: text, attributes: attributes)
         textField.hidden = true
         containerView.bringSubviewToFront(textField)
+    }
+    
+    private func configureToolbar()
+    {
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(cancelMeme(_:)))
+        let flexibleSpacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        if delegate != nil {
+            let doneButton = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(doneEditing(_:)))
+            topToolbar.setItems([cancelButton, flexibleSpacer, doneButton], animated: false)
+        }
+        else {
+            let shareButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(shareMeme(_:)))
+            self.shareButton = shareButton
+            topToolbar.setItems([cancelButton, flexibleSpacer, shareButton], animated: false)
+        }
     }
     
 }
