@@ -116,6 +116,9 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     {
         let image = composeImage()
         let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        if let popoverPresentationController = activityVC.popoverPresentationController {
+            popoverPresentationController.barButtonItem = topToolbar.items?.last
+        }
         activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, error in
             if completed {
                 let meme = self.createMemeUsingComposedImage(image)

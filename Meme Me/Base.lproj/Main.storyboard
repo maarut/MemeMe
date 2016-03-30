@@ -53,6 +53,7 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="gch-up-ccn" id="mRA-LY-p3m"/>
+                        <outlet property="shareButton" destination="ken-y8-o5f" id="uCY-Kt-n3T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yy9-UO-Eoo" userLabel="First Responder" sceneMemberID="firstResponder"/>

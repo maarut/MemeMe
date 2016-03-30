@@ -12,6 +12,7 @@ class MemeDetailViewController: UIViewController, MemeEditorDelegate {
 
     var memeToDisplay: MemeModel?
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     
     override func viewWillAppear(animated: Bool)
     {
@@ -61,6 +62,9 @@ class MemeDetailViewController: UIViewController, MemeEditorDelegate {
     @IBAction func shareMeme(sender: AnyObject)
     {
         let activityVC = UIActivityViewController(activityItems: [memeToDisplay!.composedImage], applicationActivities: nil)
+        if let popoverPresentationController = activityVC.popoverPresentationController {
+            popoverPresentationController.barButtonItem = shareButton
+        }
         presentViewController(activityVC, animated: true, completion: nil)
     }
     
