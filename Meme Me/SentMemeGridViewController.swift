@@ -25,7 +25,8 @@ class SentMemeGridViewController: UIViewController, UICollectionViewDelegate, UI
         flowLayout.minimumLineSpacing = spacing
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool)
+    {
         super.viewDidAppear(animated)
         memes = (UIApplication.sharedApplication().delegate as! AppDelegate).memes
         collectionView.reloadData()
