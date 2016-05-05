@@ -92,7 +92,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         let imagePickerVC = UIImagePickerController()
         imagePickerVC.delegate = self
         imagePickerVC.sourceType = .Camera
-        imagePickerVC.cameraDevice = .Front
+        imagePickerVC.cameraDevice = .Rear
         imagePickerVC.cameraCaptureMode = .Photo
         presentViewController(imagePickerVC, animated: true, completion: nil)
     }
